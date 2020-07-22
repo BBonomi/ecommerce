@@ -1,7 +1,7 @@
 <?php
 require_once ("vendor/autoload.php"); // do composer
-
 use Hcode\Page;
+use Hcode\PageAdmin;
 use Slim\Slim;
 
 $app = new Slim ();
@@ -17,6 +17,12 @@ $app->get ( '/', function () {
 	 * $results = $sql->select ( "SELECT *FROM tb_users" );
 	 * echo json_encode ( $results );
 	 */
+} );
+
+$app->get ( '/admin', function () {
+	// Classe PageAdmin
+	$page = new PageAdmin ();
+	$page->setTpl ( "index" );
 } );
 
 $app->run ();
