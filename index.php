@@ -60,6 +60,50 @@ $app->get ( '/admin/logout', function () {
 	exit ();
 } );
 
+// Rota todos os Usuarios aula 107
+$app->get ( "/admin/users", function () {
+	User::verifyLogin ();
+	User::listAll ();
+	$page = new PageAdmin ();
+	$page->setTpl ( "users", array (
+			"users" => $users
+	) );
+} );
+
+// Rota Create Usuarios aula 107
+$app->get ( "/admin/users/create", function () {
+	User::verifyLogin ();
+	$page = new PageAdmin ();
+	$page->setTpl ( "users-create" );
+} );
+// Metodo delete Update Usuario Aula 107
+$app->get ( "/admin/users/:iduser/delete", function ($iduser) {
+	User::verifyLogin ();
+} );
+// Rota Update Usuarios aula 107
+$app->get ( '/admin/users/:iduser', function ($iduser) {
+
+	User::verifyLogin ();
+
+	$user = new User ();
+
+	$user->get ( ( int ) $iduser );
+
+	$page = new PageAdmin ();
+
+	$page->setTpl ( "users-update", array (
+			"user" => $user->getValues ()
+	) );
+} );
+// Metodo post Create Usuario Aula 107
+$app->post ( "/admin/users/create", function () {
+	User::verifyLogin ();
+} );
+// Metodo post Update Usuario Aula 107
+$app->post ( "/admin/users/:iduser", function ($iduser) {
+	User::verifyLogin ();
+} );
+
 $app->run ();
 
 ?>
