@@ -26,7 +26,8 @@ class Page {
 
 		$this->tpl = new Tpl ();
 		$this->setData ( $this->options ["data"] );
-		$this->tpl->draw ( "header" );
+		if ($this->options ["header"] === true) // Habilitando header
+			$this->tpl->draw ( "header" );
 	}
 	private function setData($data = array ()) {
 		foreach ( $data as $key => $value ) {
@@ -40,7 +41,8 @@ class Page {
 		return $this->tpl->draw ( $name, $returnHTML );
 	}
 	public function __destruct() {
-		$this->tpl->draw ( "footer" );
+		if ($this->options ["footer"] === true) // Habilitando Footer
+			$this->tpl->draw ( "footer" );
 	}
 }
 
