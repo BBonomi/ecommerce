@@ -85,17 +85,27 @@ $app->get ( '/admin/users/:iduser', function ($iduser) {
 
 	User::verifyLogin ();
 
-	// $user = new User ();
+	$user = new User ();
 
-	// $user->get ( ( int ) $iduser );
+	$user->get ( ( int ) $iduser );
 
 	$page = new PageAdmin ();
 
-	$page->setTpl ( "users-update" ); // , array ("user" => $user->getValues ()));
+	$page->setTpl ( "users-update", array (
+			"user" => $user->getValues ()
+	) );
 } );
 // Metodo post Create Usuario Aula 107
 $app->post ( "/admin/users/create", function () {
 	User::verifyLogin ();
+	// var_dump ( $_POST ); // verificando a rota
+	$user = new User (); // criando novo usuario
+	$_POST ["inadmin"] = (isset ( $_POST ["inadmin"] )) ? 1 : 0; // definido 1 - não definido 0
+	$user->setData ( $_POST ); // usando metodo setData Model.php
+	                           // var_dump ( $user ); // vizualizando a criação do objeto usuario
+	$user->save ();
+	header ( "Location: /admin/users" );
+	exit ();
 } );
 // Metodo post Update Usuario Aula 107
 $app->post ( "/admin/users/:iduser", function ($iduser) {

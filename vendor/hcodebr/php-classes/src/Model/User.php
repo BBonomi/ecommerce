@@ -53,17 +53,29 @@ class User extends Model {
 		$sql = new Sql ();
 		return $sql->select ( "SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) ORDER BY b.desperson" );
 	}
-	/*
-	 * public function get($iduser) {
-	 * $sql = new Sql ();
-	 *
-	 * $results = $sql->select ( "SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser;", array (
-	 * ":iduser" => $iduser
-	 * ) );
-	 *
-	 * $data = $results [0];
-	 *
-	 * $this->setData ( $data );
-	 * }
-	 */
+	// Metodo para salvar novo usuario no banco de dados
+	public function save() {
+		$sql = new Sql ();
+		// Chamando a procedure BD
+		$results = $sql->select ( "CALL sp_users_save(:desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array (
+				":desperson" => $this->getdesperson (),
+				":deslogin" => $this->getdeslogin (),
+				":despassword" => $this->getdespassword (),
+				":desemail" => $this->getdesemail (),
+				":nrphone" => $this->getnrphone (),
+				":inadmin" => $this->getinadmin ()
+		) );
+		$this->setData ( $results [0] );
+	}
+	public function get($iduser) {
+		$sql = new Sql ();
+
+		$results = $sql->select ( "SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser;", array (
+				":iduser" => $iduser
+		) );
+
+		$data = $results [0];
+
+		$this->setData ( $data );
+	}
 }
