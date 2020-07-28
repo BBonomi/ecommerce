@@ -3,11 +3,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    Lista de Usu·rios
+    Lista de Usu√°rios
   </h1>
   <ol class="breadcrumb">
-    <li><a href="/admin/users"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li class="active"><a href="/admin/users">Usu·rios</a></li>
+    <li><a href="/admin"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active"><a href="/admin/users">Usu√°rios</a></li>
   </ol>
 </section>
 
@@ -19,7 +19,7 @@
   		<div class="box box-primary">
             
             <div class="box-header">
-              <a href="/admin/users/create" class="btn btn-success">Cadastrar Usu·rio</a>
+              <a href="/admin/users/create" class="btn btn-success">Cadastrar Usu√°rio</a>
             </div>
 
             <div class="box-body no-padding">
@@ -41,7 +41,7 @@
                     <td><?php echo htmlspecialchars( $value1["desperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
                     <td><?php echo htmlspecialchars( $value1["desemail"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
                     <td><?php echo htmlspecialchars( $value1["deslogin"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td/>
-                    <td><?php if( $value1["inadmin"] == 1 ){ ?>Sim<?php }else{ ?>N„o<?php } ?></td>
+                    <td><?php if( $value1["inadmin"] == 1 ){ ?>Sim<?php }else{ ?>N√£o<?php } ?></td>
                     <td>
                       <a href="/admin/users/<?php echo htmlspecialchars( $value1["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a>
                       <a href="/admin/users/<?php echo htmlspecialchars( $value1["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
