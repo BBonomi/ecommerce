@@ -53,15 +53,17 @@ class User extends Model {
 		$sql = new Sql ();
 		return $sql->select ( "SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) ORDER BY b.desperson" );
 	}
-	public function get($iduser) {
-		$sql = new Sql ();
-
-		$results = $sql->select ( "SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser;", array (
-				":iduser" => $iduser
-		) );
-
-		$data = $results [0];
-
-		$this->setData ( $data );
-	}
+	/*
+	 * public function get($iduser) {
+	 * $sql = new Sql ();
+	 *
+	 * $results = $sql->select ( "SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser;", array (
+	 * ":iduser" => $iduser
+	 * ) );
+	 *
+	 * $data = $results [0];
+	 *
+	 * $this->setData ( $data );
+	 * }
+	 */
 }
