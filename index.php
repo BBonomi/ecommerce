@@ -124,6 +124,43 @@ $app->post ( "/admin/users/:iduser", function ($iduser) {
 	exit ();
 } );
 
+// Rota Esqueci a senha aula 108
+$app->get ( "/admin/forgot", function () {
+	$page = new PageAdmin ( [ 
+			"header" => false,
+			"footer" => false
+	] );
+	$page->setTPL ( "forgot" );
+} );
+// Rota Esqueci a senha envio formulario metodo post aula 108
+$app->post ( "/admin/forgot", function () {
+
+	$user = User::getForgot ( $_POST ["email"] );
+	header ( "Location: /admin/forgot/sent" );
+	exit ();
+} );
+// Enviado email recuperação
+$app->get ( "/admin/forgot/sent", function () {
+	$page = new PageAdmin ( [ 
+			"header" => false,
+			"footer" => false
+	] );
+	$page->setTPL ( "forgot-sent" );
+} );
+// Rota Redefinir Senha
+$app->get ( "/admin/forgot/reset", function () {
+
+	$user = User::validForgotDecrypt ( $_GET ["code"] );
+	$page = new PageAdmin ( [ 
+			"header" => false,
+			"footer" => false
+	] );
+	$page->setTPL ( "forgot-reset", array (
+			"name" => $user ["desperson"],
+			"code" => $_GET ["code"]
+	) );
+} );
+
 $app->run ();
 
 ?>
