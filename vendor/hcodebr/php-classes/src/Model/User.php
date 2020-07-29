@@ -53,14 +53,17 @@ class User extends Model {
 		$sql = new Sql ();
 		return $sql->select ( "SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) ORDER BY b.desperson" );
 	}
-	// Metodo para salvar novo usuario no banco de dados
+	// Metodo para salvar novo usuario no banco de dados aula 107
 	public function save() {
 		$sql = new Sql ();
 		// Chamando a procedure BD
 		$results = $sql->select ( "CALL sp_users_save(:desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array (
 				":desperson" => $this->getdesperson (),
 				":deslogin" => $this->getdeslogin (),
-				":despassword" => $this->getdespassword (),
+				// ":despassword" => $this->getdespassword (),
+				":despassword" => password_hash ( $this->getdespassword (), PASSWORD_DEFAULT, [ 
+						'cont' => 12
+				] ),
 				":desemail" => $this->getdesemail (),
 				":nrphone" => $this->getnrphone (),
 				":inadmin" => $this->getinadmin ()
@@ -68,7 +71,7 @@ class User extends Model {
 		$this->setData ( $results [0] );
 	}
 
-	// Metodo Update usuario
+	// Metodo Update usuario aula 107
 	public function get($iduser) {
 		$sql = new Sql ();
 		$results = $sql->select ( "SELECT *FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser", array (
@@ -77,7 +80,7 @@ class User extends Model {
 		$this->setData ( $results [0] );
 	}
 
-	// Função Update
+	// Função Update aula 107
 	public function update() {
 		$sql = new Sql ();
 		// Chamando a procedure BD
@@ -93,7 +96,7 @@ class User extends Model {
 		$this->setData ( $results [0] );
 	}
 
-	// Função DELETE
+	// Função DELETE aula 107
 	public function delete() {
 		$sql = new Sql ();
 		$sql->query ( "CALL sp_users_delete(:iduser)", array (
