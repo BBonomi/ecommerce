@@ -76,9 +76,13 @@ $app->get ( "/admin/users/create", function () {
 	$page = new PageAdmin ();
 	$page->setTpl ( "users-create" );
 } );
-// Metodo delete Usuario Aula 107
+// Metodo DELETE Usuario Aula 107
 $app->get ( "/admin/users/:iduser/delete", function ($iduser) {
 	User::verifyLogin ();
+	$user = new User ();
+	$user->get ( ( int ) $iduser );
+	header ( "Location: /admin/users" );
+	exit ();
 } );
 // Rota Update Usuarios aula 107
 $app->get ( '/admin/users/:iduser', function ($iduser) {
@@ -110,6 +114,13 @@ $app->post ( "/admin/users/create", function () {
 // Metodo post Update Usuario Aula 107
 $app->post ( "/admin/users/:iduser", function ($iduser) {
 	User::verifyLogin ();
+	$user = new User (); // Video 33:20
+	$_POST ["inadmin"] = (isset ( $_POST ["inadmin"] )) ? 1 : 0;
+	$user->get ( ( int ) $iduser );
+	$user->setData ( $_POST );
+	$user->update ();
+	header ( "Location: /admin/users" );
+	exit ();
 } );
 
 $app->run ();
