@@ -161,6 +161,28 @@ $app->get ( "/admin/forgot/reset", function () {
 	) );
 } );
 
+$app->post ( "/admin/forgot/reset", function () {
+
+	$forgot = User::validForgotDecrypt ( $_POST ["code"] );
+
+	User::setFogotUsed ( $forgot ["idrecovery"] );
+	// Trocando a senha do usuario
+	$user = new User ();
+
+	$user->get ( ( int ) $forgot ["iduser"] );
+
+	$password = User::getPasswordHash ( $_POST ["password"] );
+
+	$user->setPassword ( $password );
+
+	$page = new PageAdmin ( [ 
+			"header" => false,
+			"footer" => false
+	] );
+
+	$page->setTpl ( "forgot-reset-success" );
+} );
+
 $app->run ();
 
 ?>

@@ -66,9 +66,8 @@ class User extends Model {
 				":desperson" => $this->getdesperson (),
 				":deslogin" => $this->getdeslogin (),
 				// ":despassword" => $this->getdespassword (),
-				":despassword" => password_hash ( $this->getdespassword (), PASSWORD_DEFAULT, [ 
-						'cont' => 12
-				] ),
+				// ":despassword" => password_hash ( $this->getdespassword (), PASSWORD_DEFAULT, ['cont' => 12] ),
+				":despassword" => User::getPasswordHash ( $this->getdespassword () ),
 				":desemail" => $this->getdesemail (),
 				":nrphone" => $this->getnrphone (),
 				":inadmin" => $this->getinadmin ()
@@ -93,7 +92,7 @@ class User extends Model {
 				":iduser" => $this->getiduser (),
 				":desperson" => $this->getdesperson (),
 				":deslogin" => $this->getdeslogin (),
-				":despassword" => $this->getdespassword (),
+				":despassword" => User::getPasswordHash ( $this->getdespassword () ),
 				":desemail" => $this->getdesemail (),
 				":nrphone" => $this->getnrphone (),
 				":inadmin" => $this->getinadmin ()
@@ -110,30 +109,56 @@ class User extends Model {
 	}
 
 	// Meto Esqueci a Senha aula 108
-	public static function getForgot($email) {
+	public static function getForgot($email, $inadmin = true) {
 		$sql = new Sql ();
-		$results = $sql->select ( "SELECT * FROM tb_persons a INNER JOIN tb_users b USING(idperson) WHERE a.desemail = :email; ", array (
+
+		$results = $sql->select ( "
+				
+			SELECT *
+				
+			FROM tb_persons a
+				
+			INNER JOIN tb_users b USING(idperson)
+				
+			WHERE a.desemail = :email;
+				
+		", array (
+
 				":email" => $email
 		) );
+
 		if (count ( $results ) === 0) {
+
 			throw new \Exception ( "Não foi possível recuperar a senha." );
 		} else {
+
 			$data = $results [0];
-			$resultsRecovery = $sql->select ( "CALL sp_userspasswordsrecoveries_create(:iduser, :desip)", array (
-					":iduser" => $data ["iduser"],
-					":desip" => $_SERVER ["REMOTE_ADDR"]
+
+			$results2 = $sql->select ( "CALL sp_userspasswordsrecoveries_create(:iduser, :desip)", array (
+
+					":iduser" => $data ['iduser'],
+
+					":desip" => $_SERVER ['REMOTE_ADDR']
 			) );
 
-			if (count ( $resultsRecovery ) === 0) {
-				throw new \Exception ( "Não foi possível recuperar a senha " );
+			if (count ( $results2 ) === 0) {
+
+				throw new \Exception ( "Não foi possível recuperar a senha." );
 			} else {
-				$dataRecovery = $resultsRecovery [0];
-				// Ecriptando Dados de Recuperação
+
+				$dataRecovery = $results2 [0];
+
 				$code = openssl_encrypt ( $dataRecovery ['idrecovery'], 'AES-128-CBC', pack ( "a16", User::SECRET ), 0, pack ( "a16", User::SECRET_IV ) );
 
 				$code = base64_encode ( $code );
 
-				$link = "http://www.hcodecommerce.com.br/forgot/reset?code=$code";
+				if ($inadmin === true) {
+
+					$link = "http://www.hcodecommerce.com.br/admin/forgot/reset?code=$code";
+				} else {
+
+					$link = "http://www.hcodecommerce.com.br/forgot/reset?code=$code";
+				}
 
 				$mailer = new Mailer ( $data ['desemail'], $data ['desperson'], "Redefinir senha da Hcode Store", "forgot", array (
 
@@ -148,8 +173,8 @@ class User extends Model {
 			}
 		}
 	}
-	public static function validForgotDecrypt($code) 
-	{
+	// Metodo de decodificação Esqueci a senha
+	public static function validForgotDecrypt($code) {
 		$code = base64_decode ( $code );
 
 		$idrecovery = openssl_decrypt ( $code, 'AES-128-CBC', pack ( "a16", User::SECRET ), 0, pack ( "a16", User::SECRET_IV ) );
@@ -176,23 +201,45 @@ class User extends Model {
 				
 				AND
 				
-				DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW();
+				DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW(); 
 				
 		", array (
 
 				":idrecovery" => $idrecovery
 		) );
 
-		if (count ( $results ) === 0) 
-		{
+		if (count ( $results ) === 0) {
 
 			throw new \Exception ( "Não foi possível recuperar a senha." );
-		} 
-		else 
-		{
+		} else {
 
 			return $results [0];
 		}
+	}
+	// Metodo para dar update no banco de dados recuperar senha
+	public static function setFogotUsed($idrecovery) {
+		$sql = new Sql ();
+		$sql->query ( "UPDATE tb_userspasswordsrecoveries SET dtrecovery = NOW() WHERE idrecovery = :idrecovery", array (
+				":idrecover" => $idrecovery
+		) );
+	}
+	// Metodo trocar senha recebida no formulário
+	public function setPassword($password) {
+		$sql = new Sql ();
+
+		$sql->query ( "UPDATE tb_users SET despassword = :password WHERE iduser = :iduser", array (
+
+				":password" => $password,
+
+				":iduser" => $this->getiduser ()
+		) );
+	}
+	// Metodo Hash Aula 108 $app->post ( "admin/forgot/reset", function ()
+	public static function getPasswordHash($password) {
+		return password_hash ( $password, PASSWORD_DEFAULT, [ 
+
+				'cost' => 12
+		] );
 	}
 }
 ?>
