@@ -220,7 +220,7 @@ class User extends Model {
 	public static function setFogotUsed($idrecovery) {
 		$sql = new Sql ();
 		$sql->query ( "UPDATE tb_userspasswordsrecoveries SET dtrecovery = NOW() WHERE idrecovery = :idrecovery", array (
-				":idrecover" => $idrecovery
+				":idrecovery" => $idrecovery
 		) );
 	}
 	// Metodo trocar senha recebida no formulário

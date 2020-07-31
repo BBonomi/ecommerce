@@ -6,7 +6,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use Rain\Tpl;
 
 class Mailer {
-	const USERNAME = "COLOCAR EMAIL";
+	const USERNAME = "COLOCAR EMAIL GMAIL";
 	const PASSWORD = "COLOCAR SENHA";
 	const NAME_FROM = "Hcode Store";
 	private $mail;
