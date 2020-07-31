@@ -22,6 +22,7 @@ class Category extends Model {
 		) );
 
 		$this->setData ( $results [0] );
+		Category::updateFile (); // Acrescentado aula 110
 	}
 
 	// Metodo get BD
@@ -40,6 +41,16 @@ class Category extends Model {
 
 				':idcategory' => $this->getidcategory ()
 		] );
+		Category::updateFile (); // Acrescentado aula 110
+	}
+	// Metodo atualizar lista de Categoria no rodapé do template do site principal Aula 110
+	public static function updateFile() {
+		$categories = Category::listAll ();
+		$html = [ ];
+		foreach ( $categories as $row ) {
+			array_push ( $html, '<li><a href="/categories/' . $row ['idcategory'] . '">' . $row ['descategory'] . '</a></li>' );
+		}
+		file_put_contents ( $_SERVER ['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "categories-menu.html", implode ( '', $html ) );
 	}
 }
 ?>
