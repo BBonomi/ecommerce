@@ -1,6 +1,7 @@
 <?php
 // Carregando Template Site
 use Hcode\Page;
+use Hcode\Model\Product;
 /*
  * Teste Banco de Dados
  * $app->get ( '/', function () {
@@ -13,8 +14,10 @@ use Hcode\Page;
  * } );
  */
 $app->get ( '/', function () {
-
+	$products = Product::listAll ();
 	$page = new Page ();
 
-	$page->setTpl ( "index" );
+	$page->setTpl ( "index", [ 
+			'products' => Product::checklist ( $products ) // Aula 112
+	] );
 } );

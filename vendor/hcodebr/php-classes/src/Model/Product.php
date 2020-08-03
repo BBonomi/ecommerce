@@ -13,6 +13,16 @@ class Product extends Model {
 		$sql = new Sql ();
 		return $sql->select ( "SELECT * FROM tb_products ORDER BY desproduct" );
 	}
+	// Metodo para exibir fotos lista de produtos rodapé do site aula 112 V 7:55
+	public static function checkList($list) {
+		foreach ( $list as &$row ) {
+			$p = new Product ();
+			$p->setData ( $row );
+			$row = $p->getValues ();
+		}
+		return $list;
+	}
+
 	// Metodo salvar Produto Aula 111
 	public function save() {
 		$sql = new Sql ();
