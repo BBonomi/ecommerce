@@ -1,8 +1,8 @@
 <?php
 // Rota Criar Categorias /Admin
-use Hcode\Page;
 use Hcode\PageAdmin;
 use Hcode\Model\Category;
+use Hcode\Model\Product;
 use Hcode\Model\User;
 
 $app->get ( "/admin/categories/create", function () {
@@ -51,13 +51,44 @@ $app->post ( "/admin/categories/:idcategory", function ($idcategory) {
 	header ( 'Location: /admin/categories' );
 	exit ();
 } );
-// Rota Categorias Rodapé Site Principal Aula 110
-$app->get ( "/categories/:idcategory", function ($idcategory) {
+
+// Rota Aula 113 Produtos x Categorias
+$app->get ( "/admin/categories/:idcategory/products", function ($idcategory) {
+	User::verifyLogin ();
 	$category = new Category ();
 	$category->get ( ( int ) $idcategory );
-	$page = new Page ();
-	$page->setTpl ( "category", [ 
+	$page = new PageAdmin ();
+	$page->setTpl ( "categories-products", [ 
 			'category' => $category->getValues (),
-			'products' => [ ]
+			'productsRelated' => $category->getProducts (),
+			'productsNotRelated' => $category->getProducts ( false )
 	] );
+} );
+
+// Rota Botão Add template admin/categories-products.html Aula 113
+$app->get ( "/admin/categories/:idcategory/products/:idproduct/add", function ($idcategory, $idproduct) {
+	User::verifyLogin ();
+	$category = new Category ();
+	$category->get ( ( int ) $idcategory );
+	$product = new Product ();
+	$product->get ( ( int ) $idproduct );
+	$category->addProduct ( $product );
+
+	header ( "Location: /admin/categories/" . $idcategory . "/products" );
+
+	exit ();
+} );
+// Rota Botão Remove template admin/categories-products.html Aula 113
+$app->get ( "/admin/categories/:idcategory/products/:idproduct/remove", function ($idcategory, $idproduct) {
+
+	User::verifyLogin ();
+	$category = new Category ();
+	$category->get ( ( int ) $idcategory );
+	$product = new Product ();
+	$product->get ( ( int ) $idproduct );
+	$category->removeProduct ( $product );
+
+	header ( "Location: /admin/categories/" . $idcategory . "/products" );
+
+	exit ();
 } );

@@ -1,6 +1,7 @@
 <?php
 // Carregando Template Site
 use Hcode\Page;
+use Hcode\Model\Category;
 use Hcode\Model\Product;
 /*
  * Teste Banco de Dados
@@ -19,5 +20,15 @@ $app->get ( '/', function () {
 
 	$page->setTpl ( "index", [ 
 			'products' => Product::checklist ( $products ) // Aula 112
+	] );
+} );
+// Rota Categorias Rodapé Site Principal Aula 110
+$app->get ( "/categories/:idcategory", function ($idcategory) {
+	$category = new Category ();
+	$category->get ( ( int ) $idcategory );
+	$page = new Page ();
+	$page->setTpl ( "category", [ 
+			'category' => $category->getValues (),
+			'products' => Product::checkList ( $category->getProducts () )
 	] );
 } );

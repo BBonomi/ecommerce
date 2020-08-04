@@ -38,13 +38,22 @@ $app->get ( "/admin/products/:idproduct", function ($idproduct) {
 } );
 // Rota Editar Produtos POST Aula 111
 $app->post ( "/admin/products/:idproduct", function ($idproduct) {
+
 	User::verifyLogin ();
+
 	$product = new Product ();
+
 	$product->get ( ( int ) $idproduct );
+
 	$product->setData ( $_POST );
-	$product->sabe ();
-	$product->setPhoto ( $_FILES ["file"] );
-	header ( 'Location:/admin/products' );
+
+	$product->save ();
+
+	if ($_FILES ["file"] ["name"] !== "")
+		$product->setPhoto ( $_FILES ["file"] );
+
+	header ( 'Location: /admin/products' );
+
 	exit ();
 } );
 
