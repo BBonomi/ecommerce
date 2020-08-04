@@ -24,11 +24,24 @@ $app->get ( '/', function () {
 } );
 // Rota Categorias Rodapé Site Principal Aula 110
 $app->get ( "/categories/:idcategory", function ($idcategory) {
+	$page = (isset ( $_GET ['page'] )) ? ( int ) $_GET ['page'] : 1; // Adicionado aula 114 Paginação
 	$category = new Category ();
 	$category->get ( ( int ) $idcategory );
+	$pagination = $category->getProductsPage ( $page ); // Adicionado aula 114 Paginação 9:55
+	$pages = [ ]; // Adicionado aula 114 Paginação 11:48
+	for($i = 1; $i <= $pagination ['pages']; $i ++) {
+		array_push ( $pages, [ 
+				'link' => '/categories/' . $category->getidcategory () . '?page=' . $i,
+				'page' => $i
+		] );
+	}
+
 	$page = new Page ();
+
 	$page->setTpl ( "category", [ 
 			'category' => $category->getValues (),
-			'products' => Product::checkList ( $category->getProducts () )
+			'products' => $pagination ["data"], // Alterado aula 114
+
+			'pages' => $pages
 	] );
 } );
