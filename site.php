@@ -1,6 +1,7 @@
 <?php
 // Carregando Template Site
 use Hcode\Page;
+use Hcode\Model\Cart;
 use Hcode\Model\Category;
 use Hcode\Model\Product;
 /*
@@ -53,5 +54,15 @@ $app->get ( "/products/:desurl", function ($desurl) {
 	$page->setTpl ( "product-detail", [ 
 			'product' => $product->getValues (),
 			'categories' => $product->getCategories ()
+	] );
+} );
+// Rota Carrinho Aula 116
+$app->get ( "/cart", function () {
+	$cart = Cart::getFromSession ();
+	$page = new Page ();
+	$page->setTpl ( "cart", [ 
+			'cart' => $cart->getValues (),
+			'products' => $cart->getProducts ()
+		// 'error' => Cart::getMsgError ()
 	] );
 } );

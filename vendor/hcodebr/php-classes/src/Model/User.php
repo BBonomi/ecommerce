@@ -15,6 +15,36 @@ class User extends Model {
 	// constante criptografia aula 108 linha 131
 	const SECRET_IV = "HcodePhp7_Secret_IV";
 
+	// Metodo Sessão id usuario vinculado ao Carrinho Cart.php Aula 116 15:48
+	public static function getFromSession() {
+		$user = new User ();
+
+		if (isset ( $_SESSION [User::SESSION] ) && ( int ) $_SESSION [User::SESSION] ['iduser'] > 0) {
+
+			$user->setData ( $_SESSION [User::SESSION] );
+		}
+		return $user;
+	}
+	// Metodo Verificar se usuario está logado vinculado ao Carrinho Cart.php Aula 116 17:59
+	public static function checkLogin($inadmin = true) {
+		if (! isset ( $_SESSION [User::SESSION] ) || ! $_SESSION [User::SESSION] || ! ( int ) $_SESSION [User::SESSION] ["iduser"] > 0) {
+			// Não está logado
+			return false;
+		} else {
+
+			if ($inadmin === true && ( bool ) $_SESSION [User::SESSION] ['inadmin'] === true) {
+
+				return true;
+			} else if ($inadmin === false) {
+
+				return true;
+			} else {
+
+				return false;
+			}
+		}
+	}
+
 	// Método estatico Login e Senha
 	public static function login($login, $password) {
 		// Conectando Banco de Dados
@@ -43,10 +73,14 @@ class User extends Model {
 		}
 	}
 
-	// Metodo de verificação de Login
+	// Metodo de verificação de Login || Alerado Aula 116 vinculado ao getFromSession 23:06
 	public static function verifyLogin($inadmin = true) { // $inadmin usuario logado na administracao
-		if (! isset ( $_SESSION [User::SESSION] ) || ! $_SESSION [User::SESSION] || ! ( int ) $_SESSION [User::SESSION] ["iduser"] > 0 || ( bool ) $_SESSION [User::SESSION] ["inadmin"] !== $inadmin) {
-			header ( "Location: /admin/login " ); // Caso não seja definida volta para tela de login
+		if (! User::checkLogin ( $inadmin )) {
+			if ($inadmin) {
+				header ( "Location: /admin/login" );
+			} else {
+				header ( "Location: /login" );
+			}
 			exit ();
 		}
 	}
