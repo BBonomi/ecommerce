@@ -30,19 +30,12 @@ class Product extends Model {
 		$results = $sql->select ( "CALL sp_products_save(:idproduct, :desproduct, :vlprice, :vlwidth, :vlheight, :vllength, :vlweight, :desurl)", array (
 
 				":idproduct" => $this->getidproduct (),
-
 				":desproduct" => $this->getdesproduct (),
-
 				":vlprice" => $this->getvlprice (),
-
 				":vlwidth" => $this->getvlwidth (),
-
 				":vlheight" => $this->getvlheight (),
-
 				":vllength" => $this->getvllength (),
-
 				":vlweight" => $this->getvlweight (),
-
 				":desurl" => $this->getdesurl ()
 		) );
 
@@ -96,21 +89,15 @@ class Product extends Model {
 			case "jpg" :
 
 			case "jpeg" :
-
 				$image = imagecreatefromjpeg ( $file ["tmp_name"] );
-
 				break;
 
 			case "gif" :
-
 				$image = imagecreatefromgif ( $file ["tmp_name"] );
-
 				break;
 
 			case "png" :
-
 				$image = imagecreatefrompng ( $file ["tmp_name"] );
-
 				break;
 		}
 
@@ -120,6 +107,23 @@ class Product extends Model {
 		imagedestroy ( $image );
 
 		$this->checkPhoto ();
+	}
+	// Metodo Aula 115 Detalhes do Produto
+	public function getFromURL($desurl) {
+		$sql = new Sql ();
+		$rows = $sql->select ( "SELECT * FROM tb_products WHERE desurl = :desurl LIMIT 1", [ 
+				':desurl' => $desurl
+		] );
+		$this->setData ( $rows [0] );
+	}
+	// Metodo exibir categoria do Produto Aula 115
+	public function getCategories() {
+		$sql = new Sql ();
+		return $sql->select ( "
+			SELECT * FROM tb_categories a INNER JOIN tb_productscategories b ON a.idcategory = b.idcategory WHERE b.idproduct = :idproduct
+		", [ 
+				':idproduct' => $this->getidproduct ()
+		] );
 	}
 }
 ?>
