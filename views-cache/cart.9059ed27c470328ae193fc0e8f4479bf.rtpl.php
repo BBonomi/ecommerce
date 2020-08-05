@@ -28,7 +28,7 @@
 										<th class="product-remove">&nbsp;</th>
 										<th class="product-thumbnail">&nbsp;</th>
 										<th class="product-name">Produto</th>
-										<th class="product-price">Preço</th>
+										<th class="product-price">PreÃ§o</th>
 										<th class="product-quantity">Quantidade</th>
 										<th class="product-subtotal">Total</th>
 									</tr>
@@ -37,7 +37,7 @@
 									<?php $counter1=-1;  if( isset($products) && ( is_array($products) || $products instanceof Traversable ) && sizeof($products) ) foreach( $products as $key1 => $value1 ){ $counter1++; ?>
 									<tr class="cart_item">
 										<td class="product-remove"><a title="Remove this item"
-											class="remove" href="/cart/<?php echo htmlspecialchars( $value1["idproduct"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/remove">×</a></td>
+											class="remove" href="/cart/<?php echo htmlspecialchars( $value1["idproduct"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/remove">x</a></td>
 										<td class="product-thumbnail"><a
 											href="/products/<?php echo htmlspecialchars( $value1["desurl"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><img width="145"
 												height="145" alt="poster_1_up" class="shop_thumbnail"
@@ -64,13 +64,13 @@
 							</table>
 							<div class="cart-collaterals">
 								<div class="cross-sells">
-									<h2>Cálculo de Frete</h2>
+									<h2>Calculo de Frete</h2>
 									<div class="coupon">
 										<label for="cep">CEP:</label> <input type="text"
 											placeholder="00000-000" value="<?php echo htmlspecialchars( $cart["deszipcode"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" id="cep"
 											class="input-text" name="zipcode"> <input
 											type="submit" formmethod="post" formaction="/cart/freight"
-											value="CÁLCULAR" class="button">
+											value="CALCULAR" class="button">
 									</div>
 								</div>
 								<div class="cart_totals ">

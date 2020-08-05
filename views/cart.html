@@ -37,7 +37,7 @@
 									{loop="$products"}
 									<tr class="cart_item">
 										<td class="product-remove"><a title="Remove this item"
-											class="remove" href="/cart/{$value.idproduct}/remove">�</a></td>
+											class="remove" href="/cart/{$value.idproduct}/remove">x</a></td>
 										<td class="product-thumbnail"><a
 											href="/products/{$value.desurl}"><img width="145"
 												height="145" alt="poster_1_up" class="shop_thumbnail"
@@ -64,13 +64,13 @@
 							</table>
 							<div class="cart-collaterals">
 								<div class="cross-sells">
-									<h2>C�lculo de Frete</h2>
+									<h2>Calculo de Frete</h2>
 									<div class="coupon">
 										<label for="cep">CEP:</label> <input type="text"
 											placeholder="00000-000" value="{$cart.deszipcode}" id="cep"
 											class="input-text" name="zipcode"> <input
 											type="submit" formmethod="post" formaction="/cart/freight"
-											value="C�LCULAR" class="button">
+											value="CALCULAR" class="button">
 									</div>
 								</div>
 								<div class="cart_totals ">
