@@ -1,9 +1,11 @@
 <?php
 // Carregando Template Site
 use Hcode\Page;
+use Hcode\Model\Address;
 use Hcode\Model\Cart;
 use Hcode\Model\Category;
 use Hcode\Model\Product;
+use Hcode\Model\User;
 /*
  * Teste Banco de Dados
  * $app->get ( '/', function () {
@@ -128,6 +130,40 @@ $app->post ( "/cart/freight", function () {
 
 	header ( "Location: /cart" );
 
+	exit ();
+} );
+// Rota Finalizar Compra Aula 119
+$app->get ( "/checkout", function () {
+	User::verifyLogin ( false );
+	$cart = Cart::getFromSession ();
+	$address = new Address ();
+	$page = new Page ();
+	$page->setTpl ( "checkout", [ 
+			'cart' => $cart->getValues (),
+			'address' => $address->getValues ()
+	] );
+} );
+// Rota Login Usuario Aula 119
+$app->get ( "/login", function () {
+	$page = new Page ();
+	$page->setTpl ( "login", [ 
+			'error' => User::getError ()
+	] );
+} );
+// Rota Verificando Login via post Aula 119
+$app->post ( "/login", function () {
+	try {
+		User::login ( $_POST ['login'], $_POST ['password'] );
+	} catch ( Exception $e ) {
+		User::setError ( $e->getMessage () );
+	}
+	header ( "Location: /checkout" );
+	exit ();
+} );
+// Rota Logout Aula 119 18:01
+$app->get ( "/logout", function () {
+	User::logout ();
+	header ( "Location: /login" );
 	exit ();
 } );
 		

@@ -14,6 +14,12 @@ class User extends Model {
 	const SECRET = "HcodePhp7_Secret";
 	// constante criptografia aula 108 linha 131
 	const SECRET_IV = "HcodePhp7_Secret_IV";
+	// Aula 119 - Login
+	const ERROR = "UserError";
+	// Aula 119 - Login
+	const ERROR_REGISTER = "UserErrorRegister";
+	// Aula 119 - Login
+	const SUCCESS = "UserSucesss";
 
 	// Metodo Sessão id usuario vinculado ao Carrinho Cart.php Aula 116 15:48
 	public static function getFromSession() {
@@ -50,7 +56,10 @@ class User extends Model {
 		// Conectando Banco de Dados
 		$sql = new Sql ();
 		// Consultando tabela usuarios
-		$results = $sql->select ( "SELECT *FROM tb_users WHERE deslogin = :LOGIN", array (
+		$results = $sql->select ( "SELECT * FROM tb_users a 
+		INNER JOIN tb_persons b 
+		ON a.idperson = b.idperson 
+		WHERE a.deslogin =:LOGIN", array (
 				":LOGIN" => $login
 		) );
 		// Se não encontrar usuario gera uma exceção
@@ -62,6 +71,7 @@ class User extends Model {
 		// Verficando a senha
 		if (password_verify ( $password, $data ["despassword"] ) === true) {
 			$user = new User ();
+			$data ['desperson'] = utf8_encode ( $data ['desperson'] ); // inserido aula 119 Login
 			$user->setData ( $data );
 			// Criando sessão usuario
 			$_SESSION [User::SESSION] = $user->getValues ();
@@ -84,6 +94,7 @@ class User extends Model {
 			exit ();
 		}
 	}
+	// Metodo Logout
 	public static function logout() {
 		$_SESSION [User::SESSION] = NULL;
 	}
@@ -97,7 +108,7 @@ class User extends Model {
 		$sql = new Sql ();
 		// Chamando a procedure BD
 		$results = $sql->select ( "CALL sp_users_save(:desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array (
-				":desperson" => $this->getdesperson (),
+				":desperson" => utf8_decode ( $this->getdesperson () ), // alterado aula 119 Login
 				":deslogin" => $this->getdeslogin (),
 				// ":despassword" => $this->getdespassword (),
 				// ":despassword" => password_hash ( $this->getdespassword (), PASSWORD_DEFAULT, ['cont' => 12] ),
@@ -115,6 +126,11 @@ class User extends Model {
 		$results = $sql->select ( "SELECT *FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser", array (
 				":iduser" => $iduser
 		) );
+
+		$data = $results [0]; // inserido aula 119 Login
+
+		$data ['desperson'] = utf8_encode ( $data ['desperson'] ); // inserido aula 119 Login
+
 		$this->setData ( $results [0] );
 	}
 
@@ -124,7 +140,7 @@ class User extends Model {
 		// Chamando a procedure BD
 		$results = $sql->select ( "CALL sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array (
 				":iduser" => $this->getiduser (),
-				":desperson" => $this->getdesperson (),
+				":desperson" => utf8_decode ( $this->getdesperson () ), // alterado aula 119 Login
 				":deslogin" => $this->getdeslogin (),
 				":despassword" => User::getPasswordHash ( $this->getdespassword () ),
 				":desemail" => $this->getdesemail (),
@@ -274,6 +290,21 @@ class User extends Model {
 
 				'cost' => 12
 		] );
+	}
+	// Aula 119 Erro 12:13
+	public static function setError($msg) {
+		$_SESSION [User::ERROR] = $msg;
+	}
+	// Pegar o Erro da Sessão Aula 119
+	public static function getError() {
+		$msg = (isset ( $_SESSION [User::ERROR] ) && $_SESSION [User::ERROR]) ? $_SESSION [User::ERROR] : '';
+
+		User::clearError ();
+
+		return $msg;
+	}
+	public static function clearError() {
+		$_SESSION [User::ERROR] = NULL;
 	}
 }
 ?>
