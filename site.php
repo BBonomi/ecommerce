@@ -60,10 +60,13 @@ $app->get ( "/products/:desurl", function ($desurl) {
 $app->get ( "/cart", function () {
 	$cart = Cart::getFromSession ();
 	$page = new Page ();
+	// var_dump ( $cart->getValues () );
+	// exit ();
+
 	$page->setTpl ( "cart", [ 
 			'cart' => $cart->getValues (),
-			'products' => $cart->getProducts ()
-		// 'error' => Cart::getMsgError ()
+			'products' => $cart->getProducts (),
+			'error' => Cart::getMsgError () // Aula 118 28:47
 	] );
 } );
 // Rota Adicionar Produto no Carrinho Aula 117
@@ -116,3 +119,16 @@ $app->get ( "/cart/:idproduct/remove", function ($idproduct) {
 
 	exit ();
 } );
+// Rota CEP Aula 118
+$app->post ( "/cart/freight", function () {
+
+	$cart = Cart::getFromSession ();
+
+	$cart->setFreight ( $_POST ['zipcode'] );
+
+	header ( "Location: /cart" );
+
+	exit ();
+} );
+		
+		

@@ -84,8 +84,7 @@
 											<tr class="shipping">
 												<th>Frete</th>
 												<td>R$<?php echo formatPrice($cart["vlfreight"]); ?><?php if( $cart["nrdays"]
-													> 0 ){ ?><?php echo htmlspecialchars( $cart["nrdays"], ENT_COMPAT, 'UTF-8', FALSE ); ?> dia(s)</small><?php } ?>
-												</td>
+													> 0 ){ ?><?php echo htmlspecialchars( $cart["nrdays"], ENT_COMPAT, 'UTF-8', FALSE ); ?> dia(s)</small><?php } ?></td>
 											</tr>
 											<tr class="order-total">
 												<th>Total</th>
