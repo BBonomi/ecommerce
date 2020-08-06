@@ -306,7 +306,34 @@ class User extends Model {
 	public static function clearError() {
 		$_SESSION [User::ERROR] = NULL;
 	}
+
+	// Aula 120 Erro de Registro Usuario
+	public static function setErrorRegister($msg) {
+		$_SESSION [User::ERROR_REGISTER] = $msg;
+	}
+	public static function getErrorRegister() {
+		$msg = (isset ( $_SESSION [User::ERROR_REGISTER] ) && $_SESSION [User::ERROR_REGISTER]) ? $_SESSION [User::ERROR_REGISTER] : '';
+
+		User::clearErrorRegister ();
+
+		return $msg;
+	}
+	public static function clearErrorRegister() {
+		$_SESSION [User::ERROR_REGISTER] = NULL;
+	}
+	// Checa se o login existe aula 120 12:49
+	public static function checkLoginExist($login) {
+		$sql = new Sql ();
+
+		$results = $sql->select ( "SELECT * FROM tb_users WHERE deslogin = :deslogin", [ 
+
+				':deslogin' => $login
+		] );
+
+		return (count ( $results ) > 0);
+	}
 }
+
 ?>
 
 	
