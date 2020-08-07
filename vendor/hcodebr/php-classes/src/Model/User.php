@@ -207,7 +207,7 @@ class User extends Model {
 					$link = "http://www.hcodecommerce.com.br/admin/forgot/reset?code=$code";
 				} else {
 
-					$link = "http://www.hcodecommerce.com.br/forgot/reset?code=$code";
+					$link = "http://www.hcodecommerce.com.br/forgot/reset?code=$code"; // Adicionado aula 121 5:20
 				}
 
 				$mailer = new Mailer ( $data ['desemail'], $data ['desperson'], "Redefinir senha da Hcode Store", "forgot", array (
@@ -321,7 +321,7 @@ class User extends Model {
 	public static function clearErrorRegister() {
 		$_SESSION [User::ERROR_REGISTER] = NULL;
 	}
-	// Checa se o login existe aula 120 12:49
+	// Checa se o login já existe aula 120 12:49
 	public static function checkLoginExist($login) {
 		$sql = new Sql ();
 
