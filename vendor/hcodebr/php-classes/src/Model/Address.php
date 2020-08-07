@@ -7,8 +7,8 @@ use Hcode\DB\Sql;
 
 class Address extends Model {
 	const SESSION_ERROR = "AddressError";
-	public static function getCEP($nrcep) 
-	{
+	// Metodo pegar cep viace.com.br Aula 123
+	public static function getCEP($nrcep) {
 		$nrcep = str_replace ( "-", "", $nrcep );
 
 		$ch = curl_init ();
@@ -25,8 +25,8 @@ class Address extends Model {
 
 		return $data;
 	}
-	public function loadFromCEP($nrcep) 
-	{
+	// Metodo pegar cep viace.com.br Aula 123
+	public function loadFromCEP($nrcep) {
 		$data = Address::getCEP ( $nrcep );
 
 		if (isset ( $data ['logradouro'] ) && $data ['logradouro']) {
@@ -46,8 +46,8 @@ class Address extends Model {
 			$this->setdeszipcode ( $nrcep );
 		}
 	}
-	public function save() 
-	{
+	// Metodo Salvar Endereço Aula 123
+	public function save() {
 		$sql = new Sql ();
 
 		$results = $sql->select ( "CALL sp_addresses_save(:idaddress, :idperson, :desaddress, :desnumber, :descomplement, :descity, :desstate, :descountry, :deszipcode, :desdistrict)", [ 
@@ -78,20 +78,18 @@ class Address extends Model {
 			$this->setData ( $results [0] );
 		}
 	}
-	public static function setMsgError($msg) 
-	{
+	// Mensagem de Erro 35:01
+	public static function setMsgError($msg) {
 		$_SESSION [Address::SESSION_ERROR] = $msg;
 	}
-	public static function getMsgError() 
-	{
+	public static function getMsgError() {
 		$msg = (isset ( $_SESSION [Address::SESSION_ERROR] )) ? $_SESSION [Address::SESSION_ERROR] : "";
 
 		Address::clearMsgError ();
 
 		return $msg;
 	}
-	public static function clearMsgError() 
-	{
+	public static function clearMsgError() {
 		$_SESSION [Address::SESSION_ERROR] = NULL;
 	}
 }
