@@ -133,7 +133,7 @@ class Product extends Model {
 
 		$results = $sql->select ( "				
 				
-			SELECT SQL_CALC_FOUND_ROWS *				
+			SELECT SQL_CALC_FOUND_ROWS *			
 				
 			FROM tb_products				
 				
