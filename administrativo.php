@@ -1,6 +1,5 @@
 <?php
 use Hcode\PageAdmin;
-use Hcode\Model\Category;
 use Hcode\Model\User;
 
 // Rota Template Admin
@@ -95,15 +94,5 @@ $app->post ( "/admin/forgot/reset", function () {
 	$page->setTpl ( "forgot-reset-success" );
 } );
 
-// Rota de Categorias /Admin
-$app->get ( "/admin/categories", function () {
 
-	User::verifyLogin ();
-	$categories = Category::listAll ();
-
-	$page = new PageAdmin ();
-	$page->setTpl ( "categories", [ 
-			'categories' => $categories
-	] );
-} );
 				
