@@ -8,6 +8,11 @@ function formatPrice($vlprice) { // Alterado Aula 121 6:21 (float $vlprice) para
 
 	return number_format ( $vlprice, 2, ",", "." );
 }
+// Formato Data Aula 127 Pedidos-Admin
+function formatDate($date) 
+{
+	return date ( 'd/m/Y', strtotime ( $date ) );
+}
 // Função Checar Login Aula 119 Login
 function checkLogin($inadmin = true) {
 	return User::checkLogin ( $inadmin );
